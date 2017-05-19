@@ -1,10 +1,12 @@
 package com.BidQa.test;
 
+import com.BidQa.test.Data.DataGenerator;
 import com.BidQa.test.Data.DataProviderClass;
 import com.BidQa.test.Pages.BidQaHelper;
 import com.BidQa.test.Resources.PageResources;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -17,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 public class BidQaTestRunnerTest {
     private WebDriver driver;
     private PageResources pageResources;
+    private DataGenerator dataGenerator;
+    public String projectTitle  ;
 
 
     @BeforeClass
@@ -27,30 +31,99 @@ public class BidQaTestRunnerTest {
         driver.navigate().to("http://test.bidqa.com/");
         driver.manage().window().maximize();
 
+    }
+//----------------------------Project Owner Posting and Publishing Project----------------------------------------------
+
+    @Test( priority = 1,enabled = true,dataProviderClass = DataProviderClass.class,dataProvider = "DataCredentials")
+    public void ProjectOwnerTest(String username,String pwd) throws InterruptedException {
+
         pageResources = new PageResources(driver);
+
         // Click Login link
         pageResources.getHomePage().ClickLoginLink();
 
+        //Login as Project Owner
+        BidQaHelper.LoginCred(pageResources,driver,username,pwd);
+        //Verifying that logged in as a Project Owner
+        java.lang.String welcomeText =  pageResources.getMyAccountPage().GetPresentText();
+        try {
+            Assert.assertTrue(true, String.valueOf(welcomeText.contains(" Project Owner")));
+            System.out.println(welcomeText);
+        }
+        catch (Exception e)
+        {
+            Assert.fail("Project Owner is not logged in");
+        }
+
+        //Click on post new project link
+        pageResources.getMyAccountPage().ClickPostNewProLink();
+
+        //Verifying project information text
+        java.lang.String infoText = pageResources.getMyAccountPage().GetProjectText();
+        try {
+            Assert.assertTrue(true, String.valueOf(infoText.contains("Information")));
+            System.out.println(infoText);
+        }
+        catch (Exception e)
+        {
+            Assert.fail("No Project Information");
+        }
+
+
+        //Calling PostNewProject from helper class
+        BidQaHelper.PostNewProject(pageResources, driver);
+       /* projectTitle = dataGenerator.randomTitleChars;
+        System.out.println("Project Title="+pageResources.getPostNewProjectPage().EnterProjectTitle(projectTitle));*/
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        // Calling Paypal method from helper calss
+        BidQaHelper.PayPal(pageResources, driver);
+
+        //Logout
+        //Click on logout link
+        pageResources.getLogoutPage().ClickLogoutLink();
+
     }
 
-   /* @Test(priority = 1)
-    public void HomePageTest() {
+    //----------------------QA Engineers Bidding on the Project--------------------------------------
+
+    @Test( priority = 2,dataProviderClass = DataProviderClass.class,dataProvider = "DataCredentials")
+    public void QaEngineerTest(String username,String pwd) throws InterruptedException {
+
         pageResources = new PageResources(driver);
+
         // Click Login link
         pageResources.getHomePage().ClickLoginLink();
-    }
-*/
-    @Test( dataProviderClass = DataProviderClass.class,dataProvider = "ProjectOwnerData")
-    public  void ProjectOwner(String username,String pwd){
-        pageResources = new PageResources(driver);
-        pageResources = new PageResources(driver);
-        //Enter username
-        pageResources.getLoginPage().EnterUserName(username);
-        //Enter pwd
-        pageResources.getLoginPage().EnterPwd(pwd);
-        //Click Sign In button
-        pageResources.getLoginPage().ClickSignInBtn();
 
+        //Login as QA Engineer
+        BidQaHelper.LoginCred(pageResources, driver, username, pwd);
+
+        //Verifying that logged in as a QA Engineer
+        java.lang.String welcomeQAText =  pageResources.getMyAccountPage().GetQaPresentText();
+        try {
+            Assert.assertTrue(true, String.valueOf(welcomeQAText.contains("QA Engineer")));
+            System.out.println(welcomeQAText);
+        }
+        catch (Exception e)
+        {
+            Assert.fail("qa Engineer is not logged in");
+        }
+        //Caliing QaBiddingProject method from helper class
+        BidQaHelper.QaBiddingProject(pageResources, driver);
+
+        //Verifying QA Engineer's Bidding Status
+        java.lang.String statusText =  pageResources.getQaBiddingProjectPage().GetBidStatus();
+        try {
+            Assert.assertTrue(true, String.valueOf(statusText.contains(" Your bid")));
+            System.out.println(username+":"+statusText);
+        }
+        catch (Exception e)
+        {
+            Assert.fail("Project Owner is not logged in");
+        }
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        //Logout
+        //Click on logout link
+        pageResources.getLogoutPage().ClickLogoutLink();
     }
 
 
