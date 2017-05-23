@@ -22,4 +22,6 @@ public class DataGenerator {
     public String repwdChars = "123456";
     public String titleChars = "Happy Sunny Day";
     public String descriptionChars = "Have a happy summer";
+    public String teamTitleChars=RandomStringUtils.randomAlphabetic(8).toLowerCase();
+    public String teamDescriptionChars = RandomStringUtils.randomAlphabetic(12).toLowerCase();
 }

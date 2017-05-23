@@ -18,13 +18,19 @@ public class DataProviderClass {
             // The number of times data is repeated, test will be executed the same no. of times
             // Here it will execute 1 times
             return new Object[][]{
-                    {"daniel", "mnop"}
+                    {"tomy", "tttt"}
             };
         } else if (m.getName().equalsIgnoreCase("QaEngineerTest")) {
             return new Object[][]{
-                    {"shaan", "7777"},{"danny","12345"}
+                    {"shaan", "7777"},{"danny","12345"},{"minnie","1234"}
             };
-        } else {
+        } else if (m.getName().equalsIgnoreCase("ProjectOwnerTest1")) {
+            // The number of times data is repeated, test will be executed the same no. of times
+            // Here it will execute 1 times
+            return new Object[][]{
+                    {"tomy", "tttt"}
+            };
+        }else{
             System.out.println("No method found");
         };
         return new Object[0][];

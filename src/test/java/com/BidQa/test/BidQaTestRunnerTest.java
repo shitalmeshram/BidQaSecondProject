@@ -4,7 +4,9 @@ import com.BidQa.test.Data.DataGenerator;
 import com.BidQa.test.Data.DataProviderClass;
 import com.BidQa.test.Pages.BidQaHelper;
 import com.BidQa.test.Resources.PageResources;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -35,7 +37,7 @@ public class BidQaTestRunnerTest {
 //----------------------------Project Owner Posting and Publishing Project----------------------------------------------
 
     @Test( priority = 1,enabled = true,dataProviderClass = DataProviderClass.class,dataProvider = "DataCredentials")
-    public void ProjectOwnerTest(String username,String pwd) throws InterruptedException {
+    public void ProjectOwnerTest(String username, String pwd) throws InterruptedException {
 
         pageResources = new PageResources(driver);
 
@@ -78,15 +80,17 @@ public class BidQaTestRunnerTest {
         // Calling Paypal method from helper calss
         BidQaHelper.PayPal(pageResources, driver);
 
+        //System.out.println("Project name ="+projectTitle);
+
         //Logout
         //Click on logout link
-        pageResources.getLogoutPage().ClickLogoutLink();
+        //pageResources.getLogoutPage().ClickLogoutLink();
 
     }
 
     //----------------------QA Engineers Bidding on the Project--------------------------------------
 
-    @Test( priority = 2,dataProviderClass = DataProviderClass.class,dataProvider = "DataCredentials")
+    @Test( priority = 2,enabled = false,dataProviderClass = DataProviderClass.class,dataProvider = "DataCredentials")
     public void QaEngineerTest(String username,String pwd) throws InterruptedException {
 
         pageResources = new PageResources(driver);
@@ -124,6 +128,49 @@ public class BidQaTestRunnerTest {
         //Logout
         //Click on logout link
         pageResources.getLogoutPage().ClickLogoutLink();
+    }
+
+    //---------------------Project Owner Select QA Engineers as a Winner----------------------------
+    @Test( priority = 3,enabled = false,dataProviderClass = DataProviderClass.class,dataProvider = "DataCredentials")
+    public void ProjectOwnerTest1(String username,String pwd) throws InterruptedException {
+
+        pageResources = new PageResources(driver);
+
+        // Click Login link
+        pageResources.getHomePage().ClickLoginLink();
+
+        //Login as Project Owner
+        BidQaHelper.LoginCred(pageResources, driver, username, pwd);
+        //Verifying that logged in as a Project Owner
+        java.lang.String welcomeText = pageResources.getMyAccountPage().GetPresentText();
+        try {
+            Assert.assertTrue(true, String.valueOf(welcomeText.contains(" Project Owner")));
+            System.out.println(welcomeText);
+        } catch (Exception e) {
+            Assert.fail("Project Owner is not logged in");
+        }
+
+        //calling SelectWinner method from helper class
+        BidQaHelper.SelectWinner(pageResources,driver);
+
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        //Click on My Account link
+        pageResources.getMyAccountPage().ClickMyAccountLink();
+
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        jse.executeScript("window.scrollBy(0,250)", "");
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+        //Calling CreateNewTeam method from helper class
+        BidQaHelper.CreateNewTeam(pageResources,driver);
+
+        //calling AddUsersToTeam method from helper class
+        BidQaHelper.AddUsersToTeam(pageResources,driver);
+
+        //Logout from the account
+        Thread.sleep(3000);
+       // pageResources.getLogoutPage().ClickLogoutLink();
+
     }
 
 

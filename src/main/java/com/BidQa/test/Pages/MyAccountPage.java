@@ -16,6 +16,15 @@ public class MyAccountPage {
         this.driver = driver;
         PageFactory.initElements(driver,this);
     }
+    //Define My Account link
+    @FindBy(how= How.XPATH, using="//a[@href='http://test.bidqa.com/my-account/']")
+    private WebElement myAccountLink;
+
+    //Define My Account link Method
+    public void ClickMyAccountLink()
+    {
+        myAccountLink.click();
+    }
     //Define post new project link
     @FindBy(how= How.LINK_TEXT, using="Post New Project")
     private WebElement postNewProLink;

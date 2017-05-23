@@ -15,6 +15,8 @@ public class PageResources {
     MyAccountPage myAccountPage;
     PayPalPage payPalPage;
     QaBiddingProjectPage qaBiddingProjectPage;
+    SelectWinnerPage selectWinnerPage;
+    CreateTeamPage createTeamPage;
 
     public PageResources(WebDriver driver) {
         this.driver = driver;
@@ -25,6 +27,8 @@ public class PageResources {
         myAccountPage = new MyAccountPage(driver);
         payPalPage = new PayPalPage(driver);
         qaBiddingProjectPage = new QaBiddingProjectPage(driver);
+        selectWinnerPage = new SelectWinnerPage(driver);
+        createTeamPage = new CreateTeamPage(driver);
 
     }
     public HomePage getHomePage() {
@@ -47,6 +51,12 @@ public class PageResources {
     }
     public QaBiddingProjectPage getQaBiddingProjectPage() {
         return qaBiddingProjectPage;
+    }
+    public SelectWinnerPage getSelectWinnerPage() {
+        return selectWinnerPage;
+    }
+    public CreateTeamPage getCreateTeamPage() {
+        return createTeamPage;
     }
 
 }

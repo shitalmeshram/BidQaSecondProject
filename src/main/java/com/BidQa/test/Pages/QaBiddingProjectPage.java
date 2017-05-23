@@ -26,6 +26,11 @@ public class QaBiddingProjectPage {
     public void EnterProjectTitle(String title){
         enterProjectName.sendKeys(title);
     }
+/*
+
+    public void EnterProjectTitle(){
+        enterProjectName.sendKeys("vjttugxirnfx");}
+*/
 
     //Define search field
     @FindBy(how= How.XPATH, using="//input[@id='my-top-submit-input']")
@@ -62,7 +67,7 @@ public class QaBiddingProjectPage {
 
     public void EnterDays(){
         daysComplete.clear();
-        daysComplete.sendKeys("10");
+        daysComplete.sendKeys("7");
     }
     //Define description field
     @FindBy(how= How.XPATH, using="//textarea[@name='description2']")

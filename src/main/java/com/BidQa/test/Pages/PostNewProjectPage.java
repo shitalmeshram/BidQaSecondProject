@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.Select;
 public class PostNewProjectPage {
     WebDriver driver;
     DataGenerator dataGenerator = new DataGenerator();
-    //String title = dataGenerator.randomTitleChars;
+    //public static String title ="";
 
 
     public PostNewProjectPage(WebDriver driver){
@@ -29,17 +29,11 @@ public class PostNewProjectPage {
     @FindBy(how= How.XPATH, using="//input[@name='project_title']")
     private WebElement enterProTitle;
 
-    //Define project title Method
-    /*public void EnterProjectTitle()
-    {
-      enterProTitle.sendKeys(dataGenerator.randomTitleChars);
-        //return enterProTitle;
 
-    }
-*/
-    public String EnterProjectTitle(String title){
+    public String EnterProjectTitle(){
+        String title = dataGenerator.randomTitleChars;
         enterProTitle.sendKeys(title);
-        return dataGenerator.randomTitleChars;
+        return title;
     }
     //Define description
     @FindBy(how= How.XPATH, using="//textarea[@name='project_description']")
